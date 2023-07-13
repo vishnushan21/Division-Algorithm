@@ -1,0 +1,44 @@
+module division_testbench;
+  
+  reg clk;
+  reg start;
+  reg [7:0] dividend;
+  reg [3:0] divisor;
+  wire [7:0] quotient;
+  wire [3:0] remainder;
+  
+  // Instantiate the division module
+  restoring_division restoring_div (
+    .clk(clk),
+    .start(start),
+    .dividend(dividend),
+    .divisor(divisor),
+    .quotient(quotient),
+    .remainder(remainder)
+  );
+  
+  // Clock generator
+  always begin
+    clk = 0;
+    #5;
+    clk = 1;
+    #5;
+  end
+  
+  // Test stimulus
+  initial begin
+    dividend = 120;
+    divisor = 5;
+    start = 1;
+    
+    #50;  // Allow division to complete
+    
+    start = 0;
+    #20;  // Wait for results
+    
+    $display("Quotient: %d, Remainder: %d", quotient, remainder);
+    
+    $finish; // End simulation
+  end
+  
+endmodule
